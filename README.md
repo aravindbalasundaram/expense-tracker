@@ -26,9 +26,12 @@ It supports multiple users, tracks Credits and Expenses, and provides a visual d
 | Container | Docker / Docker Compose           |
 
 ⚙️ Environment Variables
-Variable	Description
-SECRET_KEY	Flask session encryption key
-FLASK_ENV	Environment mode (production or development)
+| Variable     | Description                                      |
+| ------------ | ------------------------------------------------ |
+| `SECRET_KEY` | Flask session encryption key                     |
+| `FLASK_ENV`  | Environment mode (`production` or `development`) |
+
+
 
 ⚙️ Installation (Docker)
 1. Clone the repository:
