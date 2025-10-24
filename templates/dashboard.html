@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>📊 Dashboard</h2>
+
+<div class="row">
+  <div class="col-md-6">
+    <h5>Monthly Summary</h5>
+    <canvas id="monthlyChart" height="120"></canvas>
+  </div>
+  <div class="col-md-6">
+    <h5>Category Breakdown</h5>
+    <canvas id="categoryChart" height="120"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const months = {{ months|tojson }};
+const incomeTotals = {{ income_totals|tojson }};
+const expenseTotals = {{ expense_totals|tojson }};
+const categories = {{ categories|tojson }};
+const categoryIncome = {{ category_income|tojson }};
+const categoryExpense = {{ category_expense|tojson }};
+
+// Monthly chart
+new Chart(document.getElementById('monthlyChart'), {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [
+      { label: 'Credit (₹)', data: incomeTotals, backgroundColor: '#4caf50' },
+      { label: 'Expense (₹)', data: expenseTotals, backgroundColor: '#f44336' }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+});
+
+// Category chart
+new Chart(document.getElementById('categoryChart'), {
+  type: 'bar',
+  data: {
+    labels: categories,
+    datasets: [
+      { label: 'Credit (₹)', data: categoryIncome, backgroundColor: '#81c784' },
+      { label: 'Expense (₹)', data: categoryExpense, backgroundColor: '#e57373' }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+});
+</script>
+{% endblock %}

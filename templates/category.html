@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Category: {{ category }}</h2>
+
+{% if expenses %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Amount (₹)</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in expenses %}
+        <tr>
+            <td>{{ e.date }}</td>
+            <td>{{ "%.2f"|format(e.amount) }}</td>
+            <td>{{ e.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="alert alert-info">
+    <strong>Total in {{ category }}:</strong> ₹{{ "%.2f"|format(total) }}
+</div>
+{% else %}
+<p>No expenses in this category yet.</p>
+{% endif %}
+{% endblock %}
+
