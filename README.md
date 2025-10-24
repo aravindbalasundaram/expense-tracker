@@ -63,7 +63,7 @@ docker run -d \
 | ------------------------------------ | ----------------------------------------- |
 | `-d`                                 | Run in detached mode                      |
 | `--name expense-tracker`             | Container name                            |
-| `-p 5000:5000`                       | Maps container port 5000 → host port 5000 |
+| `-p 50000:5000`                       | Maps container port 50000 → host port 5000 |
 | `-v $(pwd)/data:/app/data`           | Persistent SQLite storage                 |
 | `-v $(pwd)/templates:/app/templates` | Mount HTML templates for easy updates     |
 | `--restart unless-stopped`           | Auto-restart container if stopped         |
@@ -97,3 +97,9 @@ To remove the container, use:
 ```bash
 docker rm expense-tracker
 ```
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
