@@ -87,21 +87,30 @@ def index():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    start_date = request.args.get("start_date")
-    end_date = request.args.get("end_date")
+    start_date = request.args.get("start_date", "").strip()
+    end_date = request.args.get("end_date", "").strip()
+    selected_category = request.args.get("category", "").strip()
 
     conn = get_db_connection()
 
-    # Build dynamic query for transactions
+    # ---- Build expense query ----
     query = "SELECT * FROM expenses WHERE user_id=?"
     params = [session["user_id"]]
-    if start_date and end_date:
-        query += " AND date BETWEEN ? AND ?"
-        params.extend([start_date, end_date])
+
+    if start_date:
+        query += " AND date >= ?"
+        params.append(start_date)
+    if end_date:
+        query += " AND date <= ?"
+        params.append(end_date)
+    if selected_category:
+        query += " AND category = ?"
+        params.append(selected_category)
+
     query += " ORDER BY date DESC"
     expenses = conn.execute(query, params).fetchall()
 
-    # ✅ Calculate income and expenses within filter range
+    # ---- Compute totals (same filters) ----
     sum_query = """
         SELECT 
             SUM(CASE WHEN type='Credit' THEN amount ELSE 0 END) AS income,
@@ -110,12 +119,28 @@ def index():
         WHERE user_id=?
     """
     sum_params = [session["user_id"]]
-    if start_date and end_date:
-        sum_query += " AND date BETWEEN ? AND ?"
-        sum_params.extend([start_date, end_date])
+    if start_date:
+        sum_query += " AND date >= ?"
+        sum_params.append(start_date)
+    if end_date:
+        sum_query += " AND date <= ?"
+        sum_params.append(end_date)
+    if selected_category:
+        sum_query += " AND category = ?"
+        sum_params.append(selected_category)
+
     totals = conn.execute(sum_query, sum_params).fetchone()
+
+    # ---- Fetch categories for dropdown ----
+    categories = conn.execute(
+        "SELECT DISTINCT category FROM expenses WHERE user_id=? ORDER BY category ASC",
+        (session["user_id"],)
+    ).fetchall()
+    categories = [c["category"] for c in categories]
+
     conn.close()
 
+    # ---- Calculate summary ----
     income = totals["income"] or 0
     spending = totals["spending"] or 0
     balance = income - spending
@@ -127,7 +152,9 @@ def index():
         spending=spending,
         balance=balance,
         start_date=start_date,
-        end_date=end_date
+        end_date=end_date,
+        categories=categories,
+        selected_category=selected_category
     )
 
 

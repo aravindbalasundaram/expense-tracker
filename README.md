@@ -10,6 +10,7 @@ It supports multiple users, tracks Credits and Expenses, and provides a visual d
 ✅ Add / Edit / Delete Transactions
 ✅ Credit & Expense Support
 ✅ Date Range Filter for reports
+✅ Category Filter for reports
 ✅ Dashboard with Charts (Chart.js)
 ✅ Category & Monthly Summaries
 ✅ CSV Import / Export

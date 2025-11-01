@@ -11,6 +11,15 @@
     <label>To:</label>
     <input type="date" class="form-control" name="end_date" value="{{ end_date }}">
   </div>
+  <div class="col-auto">
+    <label>Category:</label>
+    <select name="category" class="form-select">
+      <option value="">All</option>
+      {% for cat in categories %}
+      <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+  </div>
   <div class="col-auto mt-4">
     <button type="submit" class="btn btn-primary">Filter</button>
     <a href="{{ url_for('index') }}" class="btn btn-secondary">Reset</a>
